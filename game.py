@@ -33,7 +33,6 @@ def main():
         while True:
             secret_word = choose_random_word(WORDS)
             guessed_letters = set()
-            used_letters = set()
             attempts_left = MAX_ATTEMPTS
             game_won = False
         
@@ -43,9 +42,9 @@ def main():
                 print(f"Попыток осталось: {attempts_left}")
                 draw_gallows(attempts_left)
                 print("\nСлово: " + get_masked_word(secret_word, guessed_letters))
-                print("Использованные буквы: " + ", ".join(sorted(used_letters)))
+                print("Использованные буквы: " + ", ".join(sorted(guessed_letters)))
 
-                letter = get_user_guess(guessed_letters, used_letters, secret_word)
+                letter = get_user_guess(guessed_letters, secret_word)
 
                 if letter in secret_word:
                     guessed_letters.add(letter)
@@ -161,7 +160,7 @@ def draw_gallows(attempts_left: int):
     print(stages[MAX_ATTEMPTS - attempts_left])
     
 
-def get_user_guess(guessed_letters: Set[str], used_letters: Set[str], secret_word: str) -> str:
+def get_user_guess(guessed_letters: Set[str], secret_word: str) -> str:
     """Ввод и валидация буквы от пользователя"""
     while True:
         letter = input("Введите букву: ").upper()
@@ -170,11 +169,11 @@ def get_user_guess(guessed_letters: Set[str], used_letters: Set[str], secret_wor
             print("Допустим ввод только одной буквы.")
             continue
                 
-        if letter in used_letters:
+        if letter in guessed_letters:
             print(f"Буква '{letter}' уже была использована.")
             continue
             
-        used_letters.add(letter)
+        guessed_letters.add(letter)
         return letter
             
             
